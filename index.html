@@ -13,7 +13,7 @@
     --amber:#b07d2b; --amber-soft:#f5ecd9; --line:#e8e0d4; --radius:14px;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{background:var(--bg);color:var(--ink);font-family:'Pretendard',-apple-system,sans-serif;line-height:1.6;padding-bottom:80px}
+  body{background:var(--bg);color:var(--ink);font-family:'Pretendard',-apple-system,sans-serif;line-height:1.6;padding-bottom:120px}
   .wrap{max-width:860px;margin:0 auto;padding:0 16px}
   h1,h2{font-family:'Noto Serif KR',serif}
 
@@ -39,6 +39,7 @@
   .tl-item{display:flex;gap:14px;padding:10px 0;border-bottom:1px dashed var(--line)}
   .tl-item:last-child{border-bottom:none}
   .tl-time{flex:0 0 92px;font-weight:600;font-size:14px;color:var(--accent);padding-top:2px}
+  .tl-body{flex:1}
   .tl-body .t{font-weight:600;font-size:15px}
   .tl-body .d{font-size:13px;color:var(--sub)}
   .tl-len{font-size:11px;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:1px 6px;margin-left:6px;white-space:nowrap}
@@ -46,23 +47,25 @@
 
   /* contents cards */
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
-  .ct-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+  .ct-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;position:relative}
   .ct-card h3{font-size:16px;margin-bottom:6px}
   .ct-row{font-size:13px;margin-top:4px;display:flex;gap:6px}
-  .ct-row .k{color:var(--sub);flex:0 0 44px}
-  .chip{display:inline-block;font-size:12px;font-weight:600;border-radius:999px;padding:3px 12px;cursor:pointer;user-select:none}
+  .ct-row .k{color:var(--sub);flex:0 0 44px;padding-top:2px}
+  .ct-row .v{flex:1}
+  .chip{display:inline-block;font-size:12px;font-weight:600;border-radius:999px;padding:3px 12px;user-select:none}
   .chip.s0{background:var(--amber-soft);color:var(--amber)}
   .chip.s1{background:var(--accent-soft);color:var(--accent)}
   .chip.s2{background:var(--green-soft);color:var(--green)}
+  .chip.clickable{cursor:pointer;box-shadow:0 0 0 1.5px currentColor inset}
 
   /* checklist */
-  .chk{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line);cursor:pointer}
+  .chk{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line)}
   .chk:last-child{border-bottom:none}
-  .chk .box{flex:0 0 20px;height:20px;border:2px solid var(--line);border-radius:6px;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff}
+  .chk .box{flex:0 0 20px;height:20px;border:2px solid var(--line);border-radius:6px;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;cursor:pointer}
   .chk.done .box{background:var(--green);border-color:var(--green)}
   .chk.done .txt{color:var(--sub);text-decoration:line-through}
   .chk .due{flex:0 0 78px;font-size:12px;font-weight:600;color:var(--accent);margin-top:4px}
-  .chk .txt{font-size:14px}
+  .chk .txt{font-size:14px;flex:1}
 
   /* tables */
   table{width:100%;border-collapse:collapse;font-size:14px}
@@ -79,49 +82,63 @@
   .bar{height:18px;background:var(--line);border-radius:999px;overflow:hidden;margin:12px 0 6px;position:relative}
   .bar .fill{height:100%;background:var(--accent);border-radius:999px;transition:width .3s}
   .bar .bep-mark{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink)}
-  .recruit-nums{display:flex;justify-content:space-between;font-size:13px;color:var(--sub)}
-  .stepper{display:flex;align-items:center;gap:10px;margin-top:12px}
-  .stepper button{width:34px;height:34px;border-radius:10px;border:1px solid var(--line);background:var(--card);font-size:18px;cursor:pointer}
-  .stepper .cur{font-size:22px;font-weight:700;min-width:48px;text-align:center}
+  .recruit-nums{display:flex;justify-content:space-between;font-size:13px;color:var(--sub);flex-wrap:wrap;gap:4px}
+  .recruit-edit{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-top:14px}
+  .recruit-edit label{font-size:12px;color:var(--sub);display:block}
 
   /* decisions */
   .dec{display:flex;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line);align-items:flex-start}
   .dec:last-child{border-bottom:none}
   .dec .txt{flex:1;font-size:14px}
   .dec .date{font-size:12px;color:var(--sub);flex:0 0 52px;margin-top:3px}
-  .dec .del{border:none;background:none;color:var(--sub);cursor:pointer;font-size:14px;padding:2px}
-  .add-row{display:flex;gap:8px;margin-top:14px}
-  .add-row input{flex:1;border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-size:14px;font-family:inherit;background:var(--bg)}
-  .add-row button{border:none;background:var(--ink);color:#fff;border-radius:10px;padding:0 18px;font-size:14px;cursor:pointer}
 
   ul.plain{list-style:none}
-  ul.plain li{padding:7px 0;border-bottom:1px dashed var(--line);font-size:14px;display:flex;gap:8px}
+  ul.plain li{padding:7px 0;border-bottom:1px dashed var(--line);font-size:14px;display:flex;gap:8px;align-items:flex-start}
   ul.plain li:before{content:"📚";flex:0 0 auto}
   ul.plain li:last-child{border-bottom:none}
+  ul.plain li .v{flex:1}
 
-  /* editable */
-  .ed{cursor:pointer;border-bottom:1px dotted transparent}
-  .ed:hover{border-bottom-color:var(--accent);background:var(--accent-soft)}
-  .ed input,.ed textarea{font:inherit;width:100%;border:1px solid var(--accent);border-radius:6px;padding:2px 6px;background:#fff}
-  .hint{font-size:12px;color:var(--sub);margin-top:10px}
-  .hint:before{content:"✏️ "}
+  /* ===== edit mode ===== */
+  body.editing{background:#f6efe2}
+  body.editing section>h2:after{content:" ✏️";font-size:15px}
+  .e-in{font:inherit;font-size:14px;width:100%;border:1.5px solid #d8c9a8;border-radius:8px;padding:6px 9px;background:#fff;color:var(--ink)}
+  .e-in:focus{outline:none;border-color:var(--accent)}
+  .e-in.sm{width:84px}
+  .e-in.num{text-align:right}
+  .e-row-tools{display:flex;gap:6px;flex:0 0 auto;align-items:center}
+  .tool-btn{border:1px solid var(--line);background:#fff;border-radius:8px;width:30px;height:30px;font-size:13px;cursor:pointer;color:var(--sub)}
+  .tool-btn.del{color:#b3402a}
+  .add-btn{display:block;width:100%;margin-top:12px;border:1.5px dashed #cdbd9a;background:none;border-radius:10px;padding:9px;font-size:14px;color:var(--sub);cursor:pointer;font-family:inherit}
+  .add-btn:hover{border-color:var(--accent);color:var(--accent)}
+  .e-stack{display:flex;flex-direction:column;gap:6px;flex:1}
+  .e-line{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+  .e-label{font-size:11px;color:var(--sub);flex:0 0 auto}
+  .main-toggle{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--sub);white-space:nowrap;cursor:pointer}
+
+  /* floating action bar */
+  #fab{position:fixed;right:16px;bottom:16px;display:flex;gap:10px;z-index:50}
+  #fab button{border:none;border-radius:999px;padding:14px 22px;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;box-shadow:0 4px 14px rgba(43,38,32,.25)}
+  #fab .edit-btn{background:var(--ink);color:#fff}
+  #fab .save-btn{background:var(--green);color:#fff}
+  #fab .cancel-btn{background:#fff;color:var(--sub)}
+  #edit-hint{position:fixed;left:50%;transform:translateX(-50%);bottom:78px;background:var(--ink);color:#fff;font-size:12px;border-radius:999px;padding:6px 16px;opacity:.92;z-index:50;white-space:nowrap}
 
   footer{text-align:center;font-size:12px;color:var(--sub);margin-top:48px}
   @media (max-width:480px){
     .tl-time{flex-basis:74px;font-size:13px}
     .chk .due{flex-basis:64px}
+    #fab{right:12px;bottom:12px}
   }
 </style>
 </head>
 <body>
 <div id="mode-banner">🔌 로컬 미리보기 모드 — 아직 공유 저장소에 연결되지 않았어요. 수정 내용은 이 브라우저에만 저장됩니다.</div>
 <div class="wrap" id="app"></div>
-<footer>기획자의 독서 · 운영 대시보드 · 수정하고 싶은 글자는 클릭하면 바로 고칠 수 있어요</footer>
+<footer>기획자의 독서 · 운영 대시보드 · 내용을 고치려면 오른쪽 아래 ✏️ 수정 버튼</footer>
+<div id="fab"></div>
 
 <script>
-/* ====== 설정 ======
-   Firebase 셋업(2단계) 후 아래 firebaseConfig에 설정값을 넣으면
-   자동으로 '공유 모드'(모두 보기+수정, 실시간 동기화)로 전환됩니다. */
+/* ====== 설정 ====== */
 const firebaseConfig = {
   apiKey: "AIzaSyCopTRxRtoLSSB6atb2zoOg5D6WgZBdd_w",
   authDomain: "bookclub-event-2026.firebaseapp.com",
@@ -224,29 +241,43 @@ const DEFAULT_STATE = {
   ]
 };
 
-/* ====== 상태 & 저장 ====== */
+/* ====== 상태 ======
+   state = 모두에게 공유된 현재 내용
+   draft = 수정 모드에서 작업 중인 복사본 (저장 전까지 나한테만 보임) */
 let state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+let draft = null;
 let db = null;
+
+const editing = () => draft !== null;
+const cur = () => draft || state;
 
 function persist(){
   if (db) db.ref(DB_PATH).set(state);
-  else { localStorage.setItem(LOCAL_KEY, JSON.stringify(state)); render(); }
+  else { localStorage.setItem(LOCAL_KEY, JSON.stringify(state)); }
 }
 
-/* 깊은 병합: 저장된 데이터에 없는 새 필드는 기본값으로 채움 */
 function mergeState(saved){
   if (!saved) return JSON.parse(JSON.stringify(DEFAULT_STATE));
   const out = JSON.parse(JSON.stringify(DEFAULT_STATE));
-  for (const k of Object.keys(saved)){
-    out[k] = saved[k];
-  }
+  for (const k of Object.keys(saved)) out[k] = saved[k];
   return out;
 }
 
-function getPath(path){ return path.reduce((o,k)=>o[k], state); }
-function setPath(path, val){
-  const parent = path.slice(0,-1).reduce((o,k)=>o[k], state);
-  parent[path[path.length-1]] = val;
+function startEdit(){
+  draft = JSON.parse(JSON.stringify(state));
+  document.body.classList.add('editing');
+  render();
+}
+function saveEdit(){
+  state = draft; draft = null;
+  document.body.classList.remove('editing');
+  persist(); render();
+}
+function cancelEdit(){
+  if (!confirm('수정한 내용을 저장하지 않고 취소할까요?')) return;
+  draft = null;
+  document.body.classList.remove('editing');
+  render();
 }
 
 /* ====== 헬퍼 ====== */
@@ -256,34 +287,45 @@ function el(tag, cls, text){
   if (text !== undefined) e.textContent = text;
   return e;
 }
-function won(n){ return n.toLocaleString('ko-KR') + '원'; }
+function won(n){ return (n||0).toLocaleString('ko-KR') + '원'; }
 
-function editable(elm, path, opts={}){
-  elm.classList.add('ed');
-  elm.title = '클릭해서 수정';
-  elm.addEventListener('click', ()=>{
-    if (elm.querySelector('input')) return;
-    const cur = getPath(path);
-    const inp = document.createElement('input');
-    inp.value = cur;
-    if (opts.number) inp.type = 'text';
-    elm.textContent = '';
-    elm.appendChild(inp);
-    inp.focus(); inp.select();
-    let committed = false;
-    const commit = ()=>{
-      if (committed) return; committed = true;
-      let v = inp.value.trim();
-      if (opts.number){ v = parseInt(v.replace(/[^0-9]/g,''),10); if (isNaN(v)) v = cur; }
-      setPath(path, v);
-      persist(); render();
-    };
-    inp.addEventListener('blur', commit);
-    inp.addEventListener('keydown', e=>{
-      if (e.key==='Enter'){ e.preventDefault(); inp.blur(); }
-      if (e.key==='Escape'){ committed = true; render(); }
-    });
+/* 수정 모드 입력칸: obj[key]에 바로 연결 */
+function inp(obj, key, opts={}){
+  const i = document.createElement('input');
+  i.className = 'e-in' + (opts.sm?' sm':'') + (opts.number?' num':'');
+  i.value = obj[key] ?? '';
+  if (opts.placeholder) i.placeholder = opts.placeholder;
+  i.addEventListener('input', ()=>{
+    let v = i.value;
+    if (opts.number){ v = parseInt(String(v).replace(/[^0-9]/g,''),10) || 0; }
+    obj[key] = v;
   });
+  if (opts.number) i.addEventListener('blur', ()=>{ i.value = obj[key]; });
+  return i;
+}
+function delBtn(arr, i, label){
+  const b = el('button','tool-btn del','✕');
+  b.title = '삭제';
+  b.addEventListener('click', ()=>{
+    if (confirm((label||'이 항목') + '을(를) 삭제할까요?')){ arr.splice(i,1); render(); }
+  });
+  return b;
+}
+function upBtn(arr, i){
+  const b = el('button','tool-btn','↑');
+  b.title = '위로';
+  b.disabled = i===0;
+  b.addEventListener('click', ()=>{
+    if (i===0) return;
+    [arr[i-1], arr[i]] = [arr[i], arr[i-1]];
+    render();
+  });
+  return b;
+}
+function addBtn(text, fn){
+  const b = el('button','add-btn', '＋ ' + text);
+  b.addEventListener('click', ()=>{ fn(); render(); });
+  return b;
 }
 
 /* ====== 렌더 ====== */
@@ -299,37 +341,72 @@ function render(){
   app.appendChild(renderFlea());
   app.appendChild(renderRecruit());
   app.appendChild(renderDecisions());
+  renderFab();
+}
+
+function renderFab(){
+  const fab = document.getElementById('fab');
+  fab.textContent = '';
+  document.getElementById('edit-hint')?.remove();
+  if (editing()){
+    const hint = el('div','', '수정 중 — 💾 저장을 눌러야 모두에게 반영돼요');
+    hint.id = 'edit-hint';
+    document.body.appendChild(hint);
+    const cancel = el('button','cancel-btn','취소');
+    cancel.addEventListener('click', cancelEdit);
+    const save = el('button','save-btn','💾 저장');
+    save.addEventListener('click', saveEdit);
+    fab.appendChild(cancel); fab.appendChild(save);
+  } else {
+    const edit = el('button','edit-btn','✏️ 수정');
+    edit.addEventListener('click', startEdit);
+    fab.appendChild(edit);
+  }
 }
 
 function renderHero(){
-  const m = state.meta;
+  const m = cur().meta;
   const sec = el('div','hero');
+
+  if (editing()){
+    const fields = [
+      ['윗줄 문구','eyebrow'], ['행사명','title'], ['부제','subtitle'],
+      ['날짜 표기','dateLabel'], ['시간 표기','time'], ['행사일 (D-day 계산용, 예: 2026-08-01)','date'],
+      ['장소','venue'], ['참가비','fee'], ['규모','capacity']
+    ];
+    const stack = el('div','e-stack');
+    for (const [label,key] of fields){
+      const line = el('div','e-line');
+      const lab = el('span','e-label', label);
+      lab.style.flex = '0 0 110px'; lab.style.textAlign = 'left';
+      line.appendChild(lab);
+      line.appendChild(inp(m, key));
+      stack.appendChild(line);
+    }
+    const card = el('div','card');
+    card.style.textAlign = 'left';
+    card.appendChild(el('div','desc','기본 정보'));
+    card.appendChild(stack);
+    sec.appendChild(card);
+    return sec;
+  }
+
   sec.appendChild(el('div','eyebrow', m.eyebrow));
-  const h1 = el('h1','', m.title);
-  editable(h1, ['meta','title']);
-  sec.appendChild(h1);
+  sec.appendChild(el('h1','', m.title));
   const sub = el('p','desc', m.subtitle);
   sub.style.marginTop='8px';
-  editable(sub, ['meta','subtitle']);
   sec.appendChild(sub);
 
   const days = Math.ceil((new Date(m.date+'T00:00:00') - new Date(new Date().toDateString())) / 86400000);
-  const ddayText = days > 0 ? `D-${days}` : (days === 0 ? 'D-DAY 🎉' : '종료');
+  const ddayText = isNaN(days) ? 'D-?' : (days > 0 ? `D-${days}` : (days === 0 ? 'D-DAY 🎉' : '종료'));
   sec.appendChild(el('div','dday', ddayText));
 
   const cards = el('div','info-cards');
-  const infos = [
-    ['일시', m.dateLabel + ' ' + m.time, null],
-    ['장소', m.venue, ['meta','venue']],
-    ['참가비', m.fee, ['meta','fee']],
-    ['규모', m.capacity, ['meta','capacity']]
-  ];
-  for (const [k,v,path] of infos){
+  const infos = [['일시', m.dateLabel + ' ' + m.time], ['장소', m.venue], ['참가비', m.fee], ['규모', m.capacity]];
+  for (const [k,v] of infos){
     const c = el('div','info-card');
     c.appendChild(el('div','k',k));
-    const vv = el('div','v',v);
-    if (path) editable(vv, path);
-    c.appendChild(vv);
+    c.appendChild(el('div','v',v));
     cards.appendChild(c);
   }
   sec.appendChild(cards);
@@ -337,100 +414,159 @@ function renderHero(){
 }
 
 function renderTimeline(){
+  const s = cur();
   const sec = el('section');
   sec.appendChild(el('h2','', '① 당일 타임라인'));
-  sec.appendChild(el('div','desc','색 막대가 있는 항목이 본행사 큐시트 · 밀리면 패널토크 축소가 1순위 조정안'));
+  sec.appendChild(el('div','desc', editing()
+    ? '시간·내용 수정, ↑로 순서 이동, ✕ 삭제 · "본행사" 체크 시 색 막대 표시'
+    : '색 막대가 있는 항목이 본행사 큐시트 · 밀리면 패널토크 축소가 1순위 조정안'));
   const card = el('div','card');
-  state.timeline.forEach((t,i)=>{
-    const row = el('div','tl-item' + (t.main?' tl-main':''));
-    row.appendChild(el('div','tl-time', t.time));
-    const body = el('div','tl-body');
-    const title = el('div','t', t.title);
-    title.appendChild(el('span','tl-len', t.len));
-    body.appendChild(title);
-    const d = el('div','d', t.desc);
-    editable(d, ['timeline', i, 'desc']);
-    body.appendChild(d);
-    row.appendChild(body);
+
+  s.timeline.forEach((t,i)=>{
+    const row = el('div','tl-item' + (t.main && !editing() ? ' tl-main':''));
+    if (editing()){
+      const stack = el('div','e-stack');
+      const l1 = el('div','e-line');
+      const ti = inp(t,'time',{sm:true}); ti.placeholder='시간';
+      const le = inp(t,'len',{sm:true}); le.placeholder='길이';
+      const na = inp(t,'title'); na.placeholder='제목'; na.style.flex='1'; na.style.minWidth='140px';
+      l1.appendChild(ti); l1.appendChild(le); l1.appendChild(na);
+      const l2 = el('div','e-line');
+      const de = inp(t,'desc'); de.placeholder='설명'; de.style.flex='1';
+      l2.appendChild(de);
+      const l3 = el('div','e-line');
+      const mt = el('label','main-toggle');
+      const cb = document.createElement('input'); cb.type='checkbox'; cb.checked=!!t.main;
+      cb.addEventListener('change', ()=>{ t.main = cb.checked; });
+      mt.appendChild(cb); mt.appendChild(document.createTextNode('본행사'));
+      const tools = el('div','e-row-tools');
+      tools.appendChild(upBtn(s.timeline,i));
+      tools.appendChild(delBtn(s.timeline,i,'타임라인 "' + t.title + '"'));
+      l3.appendChild(mt); l3.style.justifyContent='space-between'; l3.appendChild(tools);
+      stack.appendChild(l1); stack.appendChild(l2); stack.appendChild(l3);
+      row.appendChild(stack);
+    } else {
+      row.appendChild(el('div','tl-time', t.time));
+      const body = el('div','tl-body');
+      const title = el('div','t', t.title);
+      title.appendChild(el('span','tl-len', t.len));
+      body.appendChild(title);
+      body.appendChild(el('div','d', t.desc));
+      row.appendChild(body);
+    }
     card.appendChild(row);
   });
+  if (editing()) card.appendChild(addBtn('타임라인 항목 추가', ()=> s.timeline.push({time:'00:00', len:'10분', title:'새 항목', desc:'', main:false})));
   sec.appendChild(card);
   return sec;
 }
 
 const STATUS = ['준비중','진행중','확정'];
 function renderContents(){
+  const s = cur();
   const sec = el('section');
   sec.appendChild(el('h2','', '② 콘텐츠'));
-  sec.appendChild(el('div','desc','상태 칩을 누르면 준비중 → 진행중 → 확정 순으로 바뀜'));
+  sec.appendChild(el('div','desc', editing() ? '상태 칩을 누르면 준비중 → 진행중 → 확정 순으로 바뀜' : ''));
   const grid = el('div','grid');
-  state.contents.forEach((c,i)=>{
+  s.contents.forEach((c,i)=>{
     const card = el('div','ct-card');
-    const chip = el('span','chip s'+c.status, STATUS[c.status]);
-    chip.addEventListener('click', ()=>{
-      state.contents[i].status = (c.status+1)%3;
-      persist(); render();
-    });
+    const chip = el('span','chip s'+(c.status||0) + (editing()?' clickable':''), STATUS[c.status||0]);
+    if (editing()){
+      chip.addEventListener('click', ()=>{ c.status = ((c.status||0)+1)%3; render(); });
+    }
     card.appendChild(chip);
-    card.appendChild(el('h3','',c.name));
-    const r1 = el('div','ct-row');
-    r1.appendChild(el('span','k','담당'));
-    const owner = el('span','', c.owner);
-    editable(owner, ['contents', i, 'owner']);
-    r1.appendChild(owner);
-    card.appendChild(r1);
-    const r2 = el('div','ct-row');
-    r2.appendChild(el('span','k','준비'));
-    const prep = el('span','', c.prep);
-    editable(prep, ['contents', i, 'prep']);
-    r2.appendChild(prep);
-    card.appendChild(r2);
+    if (editing()){
+      const tools = el('div','e-row-tools');
+      tools.style.position='absolute'; tools.style.top='12px'; tools.style.right='12px';
+      tools.appendChild(delBtn(s.contents,i,'콘텐츠 "' + c.name + '"'));
+      card.appendChild(tools);
+      const stack = el('div','e-stack'); stack.style.marginTop='10px';
+      const nameIn = inp(c,'name'); nameIn.placeholder='콘텐츠 이름';
+      stack.appendChild(nameIn);
+      const l1 = el('div','e-line'); l1.appendChild(el('span','e-label','담당')); l1.appendChild(inp(c,'owner'));
+      const l2 = el('div','e-line'); l2.appendChild(el('span','e-label','준비')); l2.appendChild(inp(c,'prep'));
+      stack.appendChild(l1); stack.appendChild(l2);
+      card.appendChild(stack);
+    } else {
+      card.appendChild(el('h3','',c.name));
+      const r1 = el('div','ct-row');
+      r1.appendChild(el('span','k','담당'));
+      r1.appendChild(el('span','v', c.owner));
+      card.appendChild(r1);
+      const r2 = el('div','ct-row');
+      r2.appendChild(el('span','k','준비'));
+      r2.appendChild(el('span','v', c.prep));
+      card.appendChild(r2);
+    }
     grid.appendChild(card);
   });
   sec.appendChild(grid);
+  if (editing()){
+    const wrap = el('div');
+    wrap.appendChild(addBtn('콘텐츠 추가', ()=> s.contents.push({name:'새 콘텐츠', owner:'미정', prep:'', status:0})));
+    sec.appendChild(wrap);
+  }
   return sec;
 }
 
-function checkRow(item, path, withDue){
+function checkRow(item, arr, i, withDue, label){
   const row = el('div','chk' + (item.done?' done':''));
   const box = el('div','box', item.done?'✓':'');
-  row.appendChild(box);
-  if (withDue) row.appendChild(el('div','due', item.due));
-  row.appendChild(el('div','txt', item.task || item.text));
-  row.addEventListener('click', ()=>{
-    setPath([...path,'done'], !item.done);
-    persist(); render();
+  box.addEventListener('click', ()=>{
+    item.done = !item.done;
+    if (!editing()) persist();   // 보기 모드 체크는 바로 모두에게 반영
+    render();
   });
+  row.appendChild(box);
+  if (editing()){
+    if (withDue){
+      const due = inp(item,'due',{sm:true}); due.placeholder='기한';
+      row.appendChild(due);
+    }
+    const t = inp(item, withDue?'task':'text'); t.style.flex='1';
+    row.appendChild(t);
+    const tools = el('div','e-row-tools');
+    tools.appendChild(delBtn(arr,i,label));
+    row.appendChild(tools);
+  } else {
+    if (withDue) row.appendChild(el('div','due', item.due));
+    row.appendChild(el('div','txt', item.task || item.text));
+  }
   return row;
 }
 
 function renderRoadmap(){
+  const s = cur();
   const sec = el('section');
   sec.appendChild(el('h2','', '③ 준비 로드맵 (D-50 → D-DAY)'));
-  sec.appendChild(el('div','desc','끝낸 항목은 클릭해서 체크'));
+  sec.appendChild(el('div','desc','네모를 클릭하면 체크 — 체크는 저장 없이 바로 반영'));
   const card = el('div','card');
-  state.roadmap.forEach((r,i)=> card.appendChild(checkRow(r, ['roadmap',i], true)));
+  s.roadmap.forEach((r,i)=> card.appendChild(checkRow(r, s.roadmap, i, true, '로드맵 항목')));
+  if (editing()) card.appendChild(addBtn('로드맵 항목 추가', ()=> s.roadmap.push({due:'날짜', task:'', done:false})));
   sec.appendChild(card);
 
   const h3 = el('div','desc','📍 답사 체크리스트 (6/20 전 카페 방문 시)');
   h3.style.margin='18px 0 10px'; h3.style.fontWeight='600'; h3.style.color='var(--ink)';
   sec.appendChild(h3);
   const card2 = el('div','card');
-  state.visitChecklist.forEach((r,i)=> card2.appendChild(checkRow(r, ['visitChecklist',i], false)));
+  s.visitChecklist.forEach((r,i)=> card2.appendChild(checkRow(r, s.visitChecklist, i, false, '답사 체크 항목')));
+  if (editing()) card2.appendChild(addBtn('답사 체크 항목 추가', ()=> s.visitChecklist.push({text:'', done:false})));
   sec.appendChild(card2);
   return sec;
 }
 
 function renderBudget(){
+  const s = cur();
   const sec = el('section');
   sec.appendChild(el('h2','', '④ 예산'));
-  sec.appendChild(el('div','desc','금액을 클릭하면 수정 가능 · 손익은 지출 합계 기준 자동 계산'));
+  sec.appendChild(el('div','desc', editing() ? '금액은 숫자만 입력 · 손익은 저장 후 자동 계산' : '손익은 지출 합계 기준 자동 계산'));
   const card = el('div','card');
 
+  /* 지출 */
   const t1 = el('table');
   const thead = el('thead');
   const hr = el('tr');
-  ['지출 항목','금액','비고'].forEach((h,idx)=>{
+  ['지출 항목','금액','비고', ...(editing()?['']:[])].forEach((h,idx)=>{
     const th = el('th','',h);
     if (idx===1) th.className='num';
     hr.appendChild(th);
@@ -438,197 +574,212 @@ function renderBudget(){
   thead.appendChild(hr); t1.appendChild(thead);
   const tb = el('tbody');
   let total = 0;
-  state.budget.expenses.forEach((e,i)=>{
-    total += e.amount;
+  s.budget.expenses.forEach((e,i)=>{
+    total += (e.amount||0);
     const tr = el('tr');
-    tr.appendChild(el('td','',e.item));
-    const amt = el('td','num', won(e.amount));
-    editable(amt, ['budget','expenses',i,'amount'], {number:true});
-    tr.appendChild(amt);
-    const note = el('td','', e.note);
-    note.style.color='var(--sub)'; note.style.fontSize='13px';
-    editable(note, ['budget','expenses',i,'note']);
-    tr.appendChild(note);
+    if (editing()){
+      const td1 = el('td'); td1.appendChild(inp(e,'item')); tr.appendChild(td1);
+      const td2 = el('td','num'); const a = inp(e,'amount',{number:true}); a.style.width='110px'; td2.appendChild(a); tr.appendChild(td2);
+      const td3 = el('td'); td3.appendChild(inp(e,'note')); tr.appendChild(td3);
+      const td4 = el('td'); td4.appendChild(delBtn(s.budget.expenses,i,'지출 "' + e.item + '"')); tr.appendChild(td4);
+    } else {
+      tr.appendChild(el('td','',e.item));
+      tr.appendChild(el('td','num', won(e.amount)));
+      const note = el('td','', e.note);
+      note.style.color='var(--sub)'; note.style.fontSize='13px';
+      tr.appendChild(note);
+    }
     tb.appendChild(tr);
   });
-  const trT = el('tr','total');
-  trT.appendChild(el('td','','지출 합계'));
-  trT.appendChild(el('td','num', won(total)));
-  trT.appendChild(el('td'));
-  tb.appendChild(trT);
+  if (!editing()){
+    const trT = el('tr','total');
+    trT.appendChild(el('td','','지출 합계'));
+    trT.appendChild(el('td','num', won(total)));
+    trT.appendChild(el('td'));
+    tb.appendChild(trT);
+  }
   t1.appendChild(tb);
   card.appendChild(t1);
+  if (editing()) card.appendChild(addBtn('지출 항목 추가', ()=> s.budget.expenses.push({item:'새 항목', amount:0, note:''})));
 
   const gap = el('div'); gap.style.height='22px'; card.appendChild(gap);
 
+  /* 수입 시나리오 */
   const t2 = el('table');
   const thead2 = el('thead');
   const hr2 = el('tr');
-  ['수입 시나리오','구성','수입','손익'].forEach((h,idx)=>{
+  ['수입 시나리오','구성','수입', ...(editing()?['']:['손익'])].forEach((h,idx)=>{
     const th = el('th','',h);
-    if (idx>=2) th.className='num';
+    if (idx>=2) th.className = editing()? '' : 'num';
     hr2.appendChild(th);
   });
   thead2.appendChild(hr2); t2.appendChild(thead2);
   const tb2 = el('tbody');
-  state.budget.scenarios.forEach((s,i)=>{
+  s.budget.scenarios.forEach((sc,i)=>{
     const tr = el('tr');
-    tr.appendChild(el('td','',s.name));
-    const calc = el('td','', s.calc);
-    editable(calc, ['budget','scenarios',i,'calc']);
-    tr.appendChild(calc);
-    const inc = el('td','num', won(s.income));
-    editable(inc, ['budget','scenarios',i,'income'], {number:true});
-    tr.appendChild(inc);
-    const diff = s.income - total;
-    const tdD = el('td','num');
-    const badge = el('span','bep ' + (diff>=0?'ok':'warn'), (diff>=0?'+':'') + won(diff).replace('원','') );
-    tdD.appendChild(badge);
-    tr.appendChild(tdD);
+    if (editing()){
+      const td1 = el('td'); td1.appendChild(inp(sc,'name')); tr.appendChild(td1);
+      const td2 = el('td'); td2.appendChild(inp(sc,'calc')); tr.appendChild(td2);
+      const td3 = el('td'); const a = inp(sc,'income',{number:true}); a.style.width='110px'; td3.appendChild(a); tr.appendChild(td3);
+      const td4 = el('td'); td4.appendChild(delBtn(s.budget.scenarios,i,'시나리오 "' + sc.name + '"')); tr.appendChild(td4);
+    } else {
+      tr.appendChild(el('td','',sc.name));
+      tr.appendChild(el('td','',sc.calc));
+      tr.appendChild(el('td','num', won(sc.income)));
+      const diff = (sc.income||0) - total;
+      const tdD = el('td','num');
+      const badge = el('span','bep ' + (diff>=0?'ok':'warn'), (diff>=0?'+':'') + won(diff).replace('원','') );
+      tdD.appendChild(badge);
+      tr.appendChild(tdD);
+    }
     tb2.appendChild(tr);
   });
   t2.appendChild(tb2);
   card.appendChild(t2);
-  card.appendChild(el('div','hint','손익분기: 참가비 25,000원 기준 약 ' + Math.ceil(total/25000) + '명'));
+  if (editing()) card.appendChild(addBtn('수입 시나리오 추가', ()=> s.budget.scenarios.push({name:'새 시나리오', calc:'', income:0})));
+  else card.appendChild(el('div','hint','✏️ 손익분기: 참가비 25,000원 기준 약 ' + Math.ceil(total/25000) + '명'));
   sec.appendChild(card);
   return sec;
 }
 
 function renderRoles(){
+  const s = cur();
   const sec = el('section');
   sec.appendChild(el('h2','', '⑤ 역할 분담'));
-  sec.appendChild(el('div','desc','담당자 이름을 클릭해서 채워넣기'));
+  sec.appendChild(el('div','desc',''));
   const card = el('div','card');
   const t = el('table');
   const thead = el('thead');
   const hr = el('tr');
-  ['역할','담당','비고'].forEach(h=> hr.appendChild(el('th','',h)));
+  ['역할','담당','비고', ...(editing()?['']:[])].forEach(h=> hr.appendChild(el('th','',h)));
   thead.appendChild(hr); t.appendChild(thead);
   const tb = el('tbody');
-  state.roles.forEach((r,i)=>{
+  s.roles.forEach((r,i)=>{
     const tr = el('tr');
-    tr.appendChild(el('td','',r.role));
-    const p = el('td','',r.person);
-    p.style.fontWeight='600';
-    if (r.person.includes('미정')) p.style.color='var(--amber)';
-    editable(p, ['roles',i,'person']);
-    tr.appendChild(p);
-    const n = el('td','',r.note);
-    n.style.color='var(--sub)'; n.style.fontSize='13px';
-    tr.appendChild(n);
+    if (editing()){
+      const td1 = el('td'); td1.appendChild(inp(r,'role')); tr.appendChild(td1);
+      const td2 = el('td'); td2.appendChild(inp(r,'person')); tr.appendChild(td2);
+      const td3 = el('td'); td3.appendChild(inp(r,'note')); tr.appendChild(td3);
+      const td4 = el('td'); td4.appendChild(delBtn(s.roles,i,'역할 "' + r.role + '"')); tr.appendChild(td4);
+    } else {
+      tr.appendChild(el('td','',r.role));
+      const p = el('td','',r.person);
+      p.style.fontWeight='600';
+      if ((r.person||'').includes('미정')) p.style.color='var(--amber)';
+      tr.appendChild(p);
+      const n = el('td','',r.note);
+      n.style.color='var(--sub)'; n.style.fontSize='13px';
+      tr.appendChild(n);
+    }
     tb.appendChild(tr);
   });
   t.appendChild(tb);
   card.appendChild(t);
+  if (editing()) card.appendChild(addBtn('역할 추가', ()=> s.roles.push({role:'새 역할', person:'미정', note:''})));
   sec.appendChild(card);
   return sec;
 }
 
 function renderFlea(){
+  const s = cur();
   const sec = el('section');
   sec.appendChild(el('h2','', '⑥ 책 플리마켓 운영 규칙'));
   sec.appendChild(el('div','desc',''));
   const card = el('div','card');
   const ul = el('ul','plain');
-  state.flea.forEach((f,i)=>{
+  s.flea.forEach((f,i)=>{
     const li = el('li');
-    const span = el('span','',f);
-    editable(span, ['flea',i]);
-    li.appendChild(span);
+    if (editing()){
+      const box = el('span','v');
+      const t = document.createElement('input');
+      t.className='e-in'; t.value=f;
+      t.addEventListener('input', ()=>{ s.flea[i] = t.value; });
+      box.appendChild(t);
+      li.appendChild(box);
+      const tools = el('div','e-row-tools');
+      tools.appendChild(delBtn(s.flea,i,'규칙'));
+      li.appendChild(tools);
+    } else {
+      li.appendChild(el('span','v',f));
+    }
     ul.appendChild(li);
   });
   card.appendChild(ul);
+  if (editing()) card.appendChild(addBtn('규칙 추가', ()=> s.flea.push('')));
   sec.appendChild(card);
   return sec;
 }
 
 function renderRecruit(){
-  const r = state.recruit;
+  const s = cur();
+  const r = s.recruit;
   const sec = el('section');
   sec.appendChild(el('h2','', '⑦ 모집 현황'));
-  sec.appendChild(el('div','desc','신청(입금 확정) 인원을 +/− 로 갱신'));
+  sec.appendChild(el('div','desc', editing() ? '신청 인원·목표·손익분기 숫자 수정' : ''));
   const card = el('div','card');
 
   const bar = el('div','bar');
   const fill = el('div','fill');
-  fill.style.width = Math.min(100, (r.current/r.max)*100) + '%';
+  fill.style.width = Math.min(100, (r.current/(r.max||1))*100) + '%';
   bar.appendChild(fill);
   const mark = el('div','bep-mark');
-  mark.style.left = (r.breakeven/r.max)*100 + '%';
+  mark.style.left = Math.min(100,(r.breakeven/(r.max||1))*100) + '%';
   mark.title = '손익분기 ' + r.breakeven + '명';
   bar.appendChild(mark);
   card.appendChild(bar);
 
-  const nums = el('div','recruit-nums');
-  nums.appendChild(el('span','', '현재 ' + r.current + '명'));
-  const right = el('span');
-  [['손익분기 ','breakeven'], [' · 목표 ','goal'], [' · 최대 ','max']].forEach(([label,key])=>{
-    right.appendChild(document.createTextNode(label));
-    const n = el('span','', String(r[key]));
-    editable(n, ['recruit', key], {number:true});
-    right.appendChild(n);
-    right.appendChild(document.createTextNode('명'));
-  });
-  nums.appendChild(right);
-  card.appendChild(nums);
-
-  const st = el('div','stepper');
-  const minus = el('button','','−');
-  minus.addEventListener('click', ()=>{ if (r.current>0){ r.current--; persist(); render(); } });
-  const cur = el('div','cur', String(r.current));
-  const plus = el('button','','+');
-  plus.addEventListener('click', ()=>{ r.current++; persist(); render(); });
-  st.appendChild(minus); st.appendChild(cur); st.appendChild(plus);
-  st.appendChild(el('span','desc','명 신청 완료'));
-  card.appendChild(st);
+  if (editing()){
+    const grid = el('div','recruit-edit');
+    [['현재 신청(입금 확정)','current'], ['손익분기','breakeven'], ['목표','goal'], ['최대','max']].forEach(([label,key])=>{
+      const box = el('div');
+      const lab = el('label','',label);
+      box.appendChild(lab);
+      box.appendChild(inp(r,key,{number:true}));
+      grid.appendChild(box);
+    });
+    card.appendChild(grid);
+  } else {
+    const nums = el('div','recruit-nums');
+    nums.appendChild(el('span','', '현재 ' + r.current + '명'));
+    nums.appendChild(el('span','', '손익분기 ' + r.breakeven + '명 · 목표 ' + r.goal + '명 · 최대 ' + r.max + '명'));
+    card.appendChild(nums);
+  }
   sec.appendChild(card);
   return sec;
 }
 
 function renderDecisions(){
+  const s = cur();
   const sec = el('section');
   sec.appendChild(el('h2','', '⑧ 결정 로그 & 미결 사항'));
-  sec.appendChild(el('div','desc','🔶 = 아직 결정 안 됨 · 결정되면 칩을 눌러 확정으로 전환'));
+  sec.appendChild(el('div','desc', editing() ? '칩을 누르면 미결 ↔ 확정 전환' : '🔶 미결 항목은 수정 모드에서 확정으로 바꿀 수 있어요'));
   const card = el('div','card');
-  state.decisions.forEach((d,i)=>{
+  s.decisions.forEach((d,i)=>{
     const row = el('div','dec');
-    row.appendChild(el('div','date', d.date));
-    const chip = el('span','chip ' + (d.open?'s0':'s2'), d.open?'미결':'확정');
+    const chip = el('span','chip ' + (d.open?'s0':'s2') + (editing()?' clickable':''), d.open?'미결':'확정');
     chip.style.flex='0 0 auto';
-    chip.addEventListener('click', ()=>{
-      d.open = !d.open;
-      if (!d.open) d.date = (new Date().getMonth()+1) + '/' + new Date().getDate();
-      persist(); render();
-    });
-    row.appendChild(chip);
-    const txt = el('div','txt', d.text);
-    editable(txt, ['decisions',i,'text']);
-    row.appendChild(txt);
-    const del = el('button','del','✕');
-    del.title='삭제';
-    del.addEventListener('click', ()=>{
-      if (confirm('이 항목을 삭제할까요?\n"' + d.text + '"')){
-        state.decisions.splice(i,1);
-        persist(); render();
-      }
-    });
-    row.appendChild(del);
+    if (editing()){
+      chip.addEventListener('click', ()=>{
+        d.open = !d.open;
+        if (!d.open && d.date === '미결') d.date = (new Date().getMonth()+1) + '/' + new Date().getDate();
+        render();
+      });
+      const dt = inp(d,'date',{sm:true}); dt.style.width='64px';
+      row.appendChild(dt);
+      row.appendChild(chip);
+      const t = inp(d,'text'); t.style.flex='1'; t.placeholder='내용';
+      row.appendChild(t);
+      const tools = el('div','e-row-tools');
+      tools.appendChild(delBtn(s.decisions,i,'결정 항목'));
+      row.appendChild(tools);
+    } else {
+      row.appendChild(el('div','date', d.date));
+      row.appendChild(chip);
+      row.appendChild(el('div','txt', d.text));
+    }
     card.appendChild(row);
   });
-  const add = el('div','add-row');
-  const inp = el('input');
-  inp.placeholder = '새 결정/미결 사항 입력 후 Enter';
-  const btn = el('button','','추가');
-  const doAdd = ()=>{
-    const v = inp.value.trim();
-    if (!v) return;
-    state.decisions.push({ date:'미결', text:v, open:true });
-    persist(); render();
-  };
-  inp.addEventListener('keydown', e=>{ if (e.key==='Enter') doAdd(); });
-  btn.addEventListener('click', doAdd);
-  add.appendChild(inp); add.appendChild(btn);
-  card.appendChild(add);
+  if (editing()) card.appendChild(addBtn('결정/미결 사항 추가', ()=> s.decisions.push({date:'미결', text:'', open:true})));
   sec.appendChild(card);
   return sec;
 }
@@ -658,12 +809,13 @@ function startShared(){
         db = firebase.database();
         const banner = document.getElementById('mode-banner');
         banner.className = 'shared';
-        banner.textContent = '🟢 공유 모드 — 수정하면 모두의 화면에 반영됩니다';
+        banner.textContent = '🟢 공유 모드 — 저장하면 모두의 화면에 반영됩니다';
         db.ref(DB_PATH).on('value', snap=>{
           const val = snap.val();
           if (val) state = mergeState(val);
           else db.ref(DB_PATH).set(state);
-          render();
+          /* 수정 모드 중엔 화면을 덮어쓰지 않음 (내 작업 보호, 저장 시 내 내용이 반영됨) */
+          if (!editing()) render();
         });
       }
     };
