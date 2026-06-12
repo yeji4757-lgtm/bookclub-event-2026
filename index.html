@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>독서모임이 이야기하는 독서모임 — 운영 대시보드</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;900&family=Pretendard:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf6ef; --card:#ffffff; --ink:#2b2620; --sub:#7a7167;
+    --accent:#c0563b; --accent-soft:#f6e3dc; --green:#3e7a4e; --green-soft:#e2efe5;
+    --amber:#b07d2b; --amber-soft:#f5ecd9; --line:#e8e0d4; --radius:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:'Pretendard',-apple-system,sans-serif;line-height:1.6;padding-bottom:80px}
+  .wrap{max-width:860px;margin:0 auto;padding:0 16px}
+  h1,h2{font-family:'Noto Serif KR',serif}
+
+  #mode-banner{font-size:13px;text-align:center;padding:8px 12px;background:var(--amber-soft);color:var(--amber)}
+  #mode-banner.shared{background:var(--green-soft);color:var(--green)}
+
+  /* hero */
+  .hero{padding:44px 0 28px;text-align:center}
+  .hero .eyebrow{font-size:13px;letter-spacing:.18em;color:var(--accent);font-weight:600;margin-bottom:10px}
+  .hero h1{font-size:clamp(26px,5.5vw,40px);font-weight:900;line-height:1.3}
+  .hero .dday{display:inline-block;margin-top:16px;background:var(--ink);color:#fff;border-radius:999px;padding:8px 22px;font-size:18px;font-weight:600}
+  .info-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:24px}
+  .info-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px 12px;text-align:center}
+  .info-card .k{font-size:12px;color:var(--sub)}
+  .info-card .v{font-size:15px;font-weight:600;margin-top:2px}
+
+  section{margin-top:36px}
+  section>h2{font-size:21px;font-weight:900;margin-bottom:4px}
+  section>.desc{font-size:13px;color:var(--sub);margin-bottom:14px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+
+  /* timeline */
+  .tl-item{display:flex;gap:14px;padding:10px 0;border-bottom:1px dashed var(--line)}
+  .tl-item:last-child{border-bottom:none}
+  .tl-time{flex:0 0 92px;font-weight:600;font-size:14px;color:var(--accent);padding-top:2px}
+  .tl-body .t{font-weight:600;font-size:15px}
+  .tl-body .d{font-size:13px;color:var(--sub)}
+  .tl-len{font-size:11px;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:1px 6px;margin-left:6px;white-space:nowrap}
+  .tl-main{border-left:3px solid var(--accent);padding-left:11px;margin-left:-14px}
+
+  /* contents cards */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+  .ct-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+  .ct-card h3{font-size:16px;margin-bottom:6px}
+  .ct-row{font-size:13px;margin-top:4px;display:flex;gap:6px}
+  .ct-row .k{color:var(--sub);flex:0 0 44px}
+  .chip{display:inline-block;font-size:12px;font-weight:600;border-radius:999px;padding:3px 12px;cursor:pointer;user-select:none}
+  .chip.s0{background:var(--amber-soft);color:var(--amber)}
+  .chip.s1{background:var(--accent-soft);color:var(--accent)}
+  .chip.s2{background:var(--green-soft);color:var(--green)}
+
+  /* checklist */
+  .chk{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line);cursor:pointer}
+  .chk:last-child{border-bottom:none}
+  .chk .box{flex:0 0 20px;height:20px;border:2px solid var(--line);border-radius:6px;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff}
+  .chk.done .box{background:var(--green);border-color:var(--green)}
+  .chk.done .txt{color:var(--sub);text-decoration:line-through}
+  .chk .due{flex:0 0 78px;font-size:12px;font-weight:600;color:var(--accent);margin-top:4px}
+  .chk .txt{font-size:14px}
+
+  /* tables */
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th{font-size:12px;color:var(--sub);text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);font-weight:600}
+  td{padding:8px;border-bottom:1px dashed var(--line);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  .num{text-align:right;font-variant-numeric:tabular-nums}
+  .total td{font-weight:700;border-top:2px solid var(--line)}
+  .bep{font-size:12px;border-radius:6px;padding:1px 7px;white-space:nowrap}
+  .bep.ok{background:var(--green-soft);color:var(--green)}
+  .bep.warn{background:var(--amber-soft);color:var(--amber)}
+
+  /* recruit */
+  .bar{height:18px;background:var(--line);border-radius:999px;overflow:hidden;margin:12px 0 6px;position:relative}
+  .bar .fill{height:100%;background:var(--accent);border-radius:999px;transition:width .3s}
+  .bar .bep-mark{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink)}
+  .recruit-nums{display:flex;justify-content:space-between;font-size:13px;color:var(--sub)}
+  .stepper{display:flex;align-items:center;gap:10px;margin-top:12px}
+  .stepper button{width:34px;height:34px;border-radius:10px;border:1px solid var(--line);background:var(--card);font-size:18px;cursor:pointer}
+  .stepper .cur{font-size:22px;font-weight:700;min-width:48px;text-align:center}
+
+  /* decisions */
+  .dec{display:flex;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line);align-items:flex-start}
+  .dec:last-child{border-bottom:none}
+  .dec .txt{flex:1;font-size:14px}
+  .dec .date{font-size:12px;color:var(--sub);flex:0 0 52px;margin-top:3px}
+  .dec .del{border:none;background:none;color:var(--sub);cursor:pointer;font-size:14px;padding:2px}
+  .add-row{display:flex;gap:8px;margin-top:14px}
+  .add-row input{flex:1;border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-size:14px;font-family:inherit;background:var(--bg)}
+  .add-row button{border:none;background:var(--ink);color:#fff;border-radius:10px;padding:0 18px;font-size:14px;cursor:pointer}
+
+  ul.plain{list-style:none}
+  ul.plain li{padding:7px 0;border-bottom:1px dashed var(--line);font-size:14px;display:flex;gap:8px}
+  ul.plain li:before{content:"📚";flex:0 0 auto}
+  ul.plain li:last-child{border-bottom:none}
+
+  /* editable */
+  .ed{cursor:pointer;border-bottom:1px dotted transparent}
+  .ed:hover{border-bottom-color:var(--accent);background:var(--accent-soft)}
+  .ed input,.ed textarea{font:inherit;width:100%;border:1px solid var(--accent);border-radius:6px;padding:2px 6px;background:#fff}
+  .hint{font-size:12px;color:var(--sub);margin-top:10px}
+  .hint:before{content:"✏️ "}
+
+  footer{text-align:center;font-size:12px;color:var(--sub);margin-top:48px}
+  @media (max-width:480px){
+    .tl-time{flex-basis:74px;font-size:13px}
+    .chk .due{flex-basis:64px}
+  }
+</style>
+</head>
+<body>
+<div id="mode-banner">🔌 로컬 미리보기 모드 — 아직 공유 저장소에 연결되지 않았어요. 수정 내용은 이 브라우저에만 저장됩니다.</div>
+<div class="wrap" id="app"></div>
+<footer>기획자의 독서 · 운영 대시보드 · 수정하고 싶은 글자는 클릭하면 바로 고칠 수 있어요</footer>
+
+<script>
+/* ====== 설정 ======
+   Firebase 셋업(2단계) 후 아래 firebaseConfig에 설정값을 넣으면
+   자동으로 '공유 모드'(모두 보기+수정, 실시간 동기화)로 전환됩니다. */
+const firebaseConfig = {
+  apiKey: "AIzaSyCopTRxRtoLSSB6atb2zoOg5D6WgZBdd_w",
+  authDomain: "bookclub-event-2026.firebaseapp.com",
+  databaseURL: "https://bookclub-event-2026-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "bookclub-event-2026",
+  storageBucket: "bookclub-event-2026.firebasestorage.app",
+  messagingSenderId: "8912710203",
+  appId: "1:8912710203:web:6503eba20a788e96d74a1e"
+};
+const DB_PATH = 'events/2026-08-01-bookclub';
+const LOCAL_KEY = 'bookclub-event-2026-08-01';
+
+/* ====== 기본 데이터 (기획안 v1, 2026-06-12) ====== */
+const DEFAULT_STATE = {
+  meta: {
+    eyebrow: '기획자의 독서 첫 오프라인 공개 행사',
+    title: '독서모임이 이야기하는 독서모임',
+    subtitle: '(가제) 독서모임을 해보고 싶고, 만들고 싶고, 궁금한 사람들의 3시간',
+    date: '2026-08-01',
+    dateLabel: '8월 1일 (토)',
+    time: '16:00 – 19:00 (대관 15–20시)',
+    venue: '성수 서브젝티브 카페',
+    fee: '25,000원 (안)',
+    capacity: '20–40명'
+  },
+  recruit: { current: 0, goal: 30, breakeven: 32, max: 40 },
+  timeline: [
+    { time:'15:00', len:'40분', title:'운영진 세팅', desc:'플리마켓 부스, 명찰·접수대, 음향 테스트, 테이블 배치', main:false },
+    { time:'15:40', len:'20분', title:'입장 + 플리마켓 얼리 브라우징', desc:'일찍 온 참가자들이 책 구경하며 자연스럽게 대기', main:false },
+    { time:'16:00', len:'10분', title:'오프닝', desc:'행사 취지, 진행 안내, 가벼운 아이스브레이킹', main:true },
+    { time:'16:10', len:'20분', title:'기획자의독서 소개 세션', desc:'모임 히스토리 · 시즌 운영 방식 (담당: 예지)', main:true },
+    { time:'16:30', len:'40분', title:'도영님 세션', desc:'주제 확정 필요 (예: 독서모임을 5년 지속하는 법)', main:true },
+    { time:'17:10', len:'20분', title:'휴식 + 플리마켓 타임', desc:'플리마켓 매출 핵심 구간', main:false },
+    { time:'17:30', len:'45분', title:'미니 독서모임 체험', desc:'테이블별 4–6명, 멤버가 테이블장 · 짧은 텍스트로 실제 모임 방식 체험', main:true },
+    { time:'18:15', len:'35분', title:'멤버 패널토크 + Q&A', desc:'멤버 3–4명 "어떻게 시작하고 지속했나" + 청중 질문 · 밀리면 25분으로 축소', main:true },
+    { time:'18:50', len:'10분', title:'클로징', desc:'신규 멤버 모집 안내, 단체사진', main:true },
+    { time:'19:00', len:'60분', title:'자유 교류 + 플리마켓 막판 + 정리', desc:'19:30부터 운영진 정리 시작', main:false }
+  ],
+  contents: [
+    { name:'도영님 세션', owner:'도영', prep:'주제·자료 6/27까지 확정', status:0 },
+    { name:'미니 독서모임 체험', owner:'테이블장 4–6명 (미정)', prep:'체험용 짧은 텍스트 선정·인쇄, 진행 가이드', status:0 },
+    { name:'멤버 패널토크 + Q&A', owner:'멤버 3–4명 (섭외 중)', prep:'질문지 사전 준비, 사회 진행안', status:0 },
+    { name:'기획자의독서 소개 세션', owner:'예지', prep:'모임 히스토리·운영방식 슬라이드', status:0 },
+    { name:'책 플리마켓', owner:'전담 멤버 1명 (미정)', prep:'책 사전 접수, 가격표, 정산 QR', status:0 }
+  ],
+  roadmap: [
+    { due:'~6/20', task:'카페 사전답사 (아래 답사 체크리스트 확인)', done:false },
+    { due:'~6/27', task:'도영님 세션 주제 확정 · 콘텐츠 담당자 배정 · 참가비 확정 · 행사명 확정', done:false },
+    { due:'~7/4', task:'모집 페이지 오픈(신청폼+입금 안내) · 포스터 완성 · 홍보 시작', done:false },
+    { due:'7/13', task:'중간 점검 게이트 — 신청 15명 미만이면 홍보 2차 + 멤버 +1 초대', done:false },
+    { due:'7/25 D-7', task:'모집 마감 · 리마인드 발송 · 테이블장 배정 · 인쇄물 발주 · 플리마켓 책 접수 마감', done:false },
+    { due:'7/31 D-1', task:'최종 리마인드(장소·시간) · 물품 패킹 · 큐시트 최종본 운영진 공유', done:false },
+    { due:'8/1', task:'행사 당일 — 큐시트대로 운영', done:false }
+  ],
+  visitChecklist: [
+    { text:'최대 수용 인원 / 테이블·좌석 배치 (체험 세션용 4–6인 테이블 가능?)', done:false },
+    { text:'마이크·스피커·빔/스크린 유무', done:false },
+    { text:'음료가 대관비에 포함인지, 별도면 단가 ← 예산 1순위 변수!', done:false },
+    { text:'플리마켓 부스 공간 + 콘센트 위치', done:false },
+    { text:'외부 음식 반입 가능 여부', done:false },
+    { text:'환불·취소 규정, 계약금 일정', done:false }
+  ],
+  budget: {
+    expenses: [
+      { item:'대관비', amount:500000, note:'확정' },
+      { item:'음료/다과', amount:150000, note:'답사 때 포함 여부 확인' },
+      { item:'인쇄물·명찰·소품', amount:100000, note:'포스터, 네임택, 체험 텍스트, 가격표' },
+      { item:'예비비', amount:50000, note:'' }
+    ],
+    scenarios: [
+      { name:'보수', calc:'25명 × 25,000', income:625000 },
+      { name:'기본', calc:'30명 × 25,000', income:750000 },
+      { name:'확장', calc:'40명 × 25,000', income:1000000 }
+    ]
+  },
+  roles: [
+    { role:'총괄·사회·타임키퍼', person:'예지', note:'타임키핑 겸임 어려우면 별도 지정' },
+    { role:'메인 세션', person:'도영', note:'주제·자료 6/27까지' },
+    { role:'접수·명찰', person:'미정', note:'15:30–16:30 집중' },
+    { role:'플리마켓 전담', person:'미정', note:'정산·진열 (예지 겸임 불가)' },
+    { role:'테이블장 (체험 세션)', person:'미정 4–6명', note:'D-7에 배정 · 간단 가이드 전달' },
+    { role:'사진·기록', person:'미정', note:'행사 후 콘텐츠로 활용' }
+  ],
+  flea: [
+    '운영 구간 3개: 얼리 입장(15:40~) · 휴식 시간(17:10~) · 행사 후(19:00~)',
+    '책 수급: 멤버 사전 접수, 1인 3–5권 권장 · 7/25(D-7) 접수 마감',
+    '가격: 균일가 2단계 (5,000원 / 10,000원) — 현장 정산 단순화',
+    '결제: 계좌이체 QR + 현금 소액 · 장부는 현장 시트로',
+    '안 팔린 책: 판매자 회수 원칙 · 원하면 기부 박스 운영',
+    '전담 멤버 1명 필수 (총괄 겸임 불가)'
+  ],
+  decisions: [
+    { date:'6/12', text:'행사 형태 확정: 8/1(토) 성수 서브젝티브, 본행사 16–19시, 유료', open:false },
+    { date:'6/12', text:'콘텐츠 5종 확정: 도영님 세션 · 미니 체험 · 패널토크 · 모임 소개 · 플리마켓', open:false },
+    { date:'6/12', text:'운영 대시보드는 공유 편집 웹페이지로 (노션 안 씀)', open:false },
+    { date:'미결', text:'멤버 참가비 — 외부와 동일가? 할인가?', open:true },
+    { date:'미결', text:'플리마켓 수익 처리 — 판매자 정산 / 운영비 기부 / 절충', open:true },
+    { date:'미결', text:'도영님 세션 주제 (6/27까지)', open:true },
+    { date:'미결', text:'행사명 확정 (현재 가제)', open:true }
+  ]
+};
+
+/* ====== 상태 & 저장 ====== */
+let state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+let db = null;
+
+function persist(){
+  if (db) db.ref(DB_PATH).set(state);
+  else { localStorage.setItem(LOCAL_KEY, JSON.stringify(state)); render(); }
+}
+
+/* 깊은 병합: 저장된 데이터에 없는 새 필드는 기본값으로 채움 */
+function mergeState(saved){
+  if (!saved) return JSON.parse(JSON.stringify(DEFAULT_STATE));
+  const out = JSON.parse(JSON.stringify(DEFAULT_STATE));
+  for (const k of Object.keys(saved)){
+    out[k] = saved[k];
+  }
+  return out;
+}
+
+function getPath(path){ return path.reduce((o,k)=>o[k], state); }
+function setPath(path, val){
+  const parent = path.slice(0,-1).reduce((o,k)=>o[k], state);
+  parent[path[path.length-1]] = val;
+}
+
+/* ====== 헬퍼 ====== */
+function el(tag, cls, text){
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+function won(n){ return n.toLocaleString('ko-KR') + '원'; }
+
+function editable(elm, path, opts={}){
+  elm.classList.add('ed');
+  elm.title = '클릭해서 수정';
+  elm.addEventListener('click', ()=>{
+    if (elm.querySelector('input')) return;
+    const cur = getPath(path);
+    const inp = document.createElement('input');
+    inp.value = cur;
+    if (opts.number) inp.type = 'text';
+    elm.textContent = '';
+    elm.appendChild(inp);
+    inp.focus(); inp.select();
+    let committed = false;
+    const commit = ()=>{
+      if (committed) return; committed = true;
+      let v = inp.value.trim();
+      if (opts.number){ v = parseInt(v.replace(/[^0-9]/g,''),10); if (isNaN(v)) v = cur; }
+      setPath(path, v);
+      persist(); render();
+    };
+    inp.addEventListener('blur', commit);
+    inp.addEventListener('keydown', e=>{
+      if (e.key==='Enter'){ e.preventDefault(); inp.blur(); }
+      if (e.key==='Escape'){ committed = true; render(); }
+    });
+  });
+}
+
+/* ====== 렌더 ====== */
+function render(){
+  const app = document.getElementById('app');
+  app.textContent = '';
+  app.appendChild(renderHero());
+  app.appendChild(renderTimeline());
+  app.appendChild(renderContents());
+  app.appendChild(renderRoadmap());
+  app.appendChild(renderBudget());
+  app.appendChild(renderRoles());
+  app.appendChild(renderFlea());
+  app.appendChild(renderRecruit());
+  app.appendChild(renderDecisions());
+}
+
+function renderHero(){
+  const m = state.meta;
+  const sec = el('div','hero');
+  sec.appendChild(el('div','eyebrow', m.eyebrow));
+  const h1 = el('h1','', m.title);
+  editable(h1, ['meta','title']);
+  sec.appendChild(h1);
+  const sub = el('p','desc', m.subtitle);
+  sub.style.marginTop='8px';
+  editable(sub, ['meta','subtitle']);
+  sec.appendChild(sub);
+
+  const days = Math.ceil((new Date(m.date+'T00:00:00') - new Date(new Date().toDateString())) / 86400000);
+  const ddayText = days > 0 ? `D-${days}` : (days === 0 ? 'D-DAY 🎉' : '종료');
+  sec.appendChild(el('div','dday', ddayText));
+
+  const cards = el('div','info-cards');
+  const infos = [
+    ['일시', m.dateLabel + ' ' + m.time, null],
+    ['장소', m.venue, ['meta','venue']],
+    ['참가비', m.fee, ['meta','fee']],
+    ['규모', m.capacity, ['meta','capacity']]
+  ];
+  for (const [k,v,path] of infos){
+    const c = el('div','info-card');
+    c.appendChild(el('div','k',k));
+    const vv = el('div','v',v);
+    if (path) editable(vv, path);
+    c.appendChild(vv);
+    cards.appendChild(c);
+  }
+  sec.appendChild(cards);
+  return sec;
+}
+
+function renderTimeline(){
+  const sec = el('section');
+  sec.appendChild(el('h2','', '① 당일 타임라인'));
+  sec.appendChild(el('div','desc','색 막대가 있는 항목이 본행사 큐시트 · 밀리면 패널토크 축소가 1순위 조정안'));
+  const card = el('div','card');
+  state.timeline.forEach((t,i)=>{
+    const row = el('div','tl-item' + (t.main?' tl-main':''));
+    row.appendChild(el('div','tl-time', t.time));
+    const body = el('div','tl-body');
+    const title = el('div','t', t.title);
+    title.appendChild(el('span','tl-len', t.len));
+    body.appendChild(title);
+    const d = el('div','d', t.desc);
+    editable(d, ['timeline', i, 'desc']);
+    body.appendChild(d);
+    row.appendChild(body);
+    card.appendChild(row);
+  });
+  sec.appendChild(card);
+  return sec;
+}
+
+const STATUS = ['준비중','진행중','확정'];
+function renderContents(){
+  const sec = el('section');
+  sec.appendChild(el('h2','', '② 콘텐츠'));
+  sec.appendChild(el('div','desc','상태 칩을 누르면 준비중 → 진행중 → 확정 순으로 바뀜'));
+  const grid = el('div','grid');
+  state.contents.forEach((c,i)=>{
+    const card = el('div','ct-card');
+    const chip = el('span','chip s'+c.status, STATUS[c.status]);
+    chip.addEventListener('click', ()=>{
+      state.contents[i].status = (c.status+1)%3;
+      persist(); render();
+    });
+    card.appendChild(chip);
+    card.appendChild(el('h3','',c.name));
+    const r1 = el('div','ct-row');
+    r1.appendChild(el('span','k','담당'));
+    const owner = el('span','', c.owner);
+    editable(owner, ['contents', i, 'owner']);
+    r1.appendChild(owner);
+    card.appendChild(r1);
+    const r2 = el('div','ct-row');
+    r2.appendChild(el('span','k','준비'));
+    const prep = el('span','', c.prep);
+    editable(prep, ['contents', i, 'prep']);
+    r2.appendChild(prep);
+    card.appendChild(r2);
+    grid.appendChild(card);
+  });
+  sec.appendChild(grid);
+  return sec;
+}
+
+function checkRow(item, path, withDue){
+  const row = el('div','chk' + (item.done?' done':''));
+  const box = el('div','box', item.done?'✓':'');
+  row.appendChild(box);
+  if (withDue) row.appendChild(el('div','due', item.due));
+  row.appendChild(el('div','txt', item.task || item.text));
+  row.addEventListener('click', ()=>{
+    setPath([...path,'done'], !item.done);
+    persist(); render();
+  });
+  return row;
+}
+
+function renderRoadmap(){
+  const sec = el('section');
+  sec.appendChild(el('h2','', '③ 준비 로드맵 (D-50 → D-DAY)'));
+  sec.appendChild(el('div','desc','끝낸 항목은 클릭해서 체크'));
+  const card = el('div','card');
+  state.roadmap.forEach((r,i)=> card.appendChild(checkRow(r, ['roadmap',i], true)));
+  sec.appendChild(card);
+
+  const h3 = el('div','desc','📍 답사 체크리스트 (6/20 전 카페 방문 시)');
+  h3.style.margin='18px 0 10px'; h3.style.fontWeight='600'; h3.style.color='var(--ink)';
+  sec.appendChild(h3);
+  const card2 = el('div','card');
+  state.visitChecklist.forEach((r,i)=> card2.appendChild(checkRow(r, ['visitChecklist',i], false)));
+  sec.appendChild(card2);
+  return sec;
+}
+
+function renderBudget(){
+  const sec = el('section');
+  sec.appendChild(el('h2','', '④ 예산'));
+  sec.appendChild(el('div','desc','금액을 클릭하면 수정 가능 · 손익은 지출 합계 기준 자동 계산'));
+  const card = el('div','card');
+
+  const t1 = el('table');
+  const thead = el('thead');
+  const hr = el('tr');
+  ['지출 항목','금액','비고'].forEach((h,idx)=>{
+    const th = el('th','',h);
+    if (idx===1) th.className='num';
+    hr.appendChild(th);
+  });
+  thead.appendChild(hr); t1.appendChild(thead);
+  const tb = el('tbody');
+  let total = 0;
+  state.budget.expenses.forEach((e,i)=>{
+    total += e.amount;
+    const tr = el('tr');
+    tr.appendChild(el('td','',e.item));
+    const amt = el('td','num', won(e.amount));
+    editable(amt, ['budget','expenses',i,'amount'], {number:true});
+    tr.appendChild(amt);
+    const note = el('td','', e.note);
+    note.style.color='var(--sub)'; note.style.fontSize='13px';
+    editable(note, ['budget','expenses',i,'note']);
+    tr.appendChild(note);
+    tb.appendChild(tr);
+  });
+  const trT = el('tr','total');
+  trT.appendChild(el('td','','지출 합계'));
+  trT.appendChild(el('td','num', won(total)));
+  trT.appendChild(el('td'));
+  tb.appendChild(trT);
+  t1.appendChild(tb);
+  card.appendChild(t1);
+
+  const gap = el('div'); gap.style.height='22px'; card.appendChild(gap);
+
+  const t2 = el('table');
+  const thead2 = el('thead');
+  const hr2 = el('tr');
+  ['수입 시나리오','구성','수입','손익'].forEach((h,idx)=>{
+    const th = el('th','',h);
+    if (idx>=2) th.className='num';
+    hr2.appendChild(th);
+  });
+  thead2.appendChild(hr2); t2.appendChild(thead2);
+  const tb2 = el('tbody');
+  state.budget.scenarios.forEach((s,i)=>{
+    const tr = el('tr');
+    tr.appendChild(el('td','',s.name));
+    const calc = el('td','', s.calc);
+    editable(calc, ['budget','scenarios',i,'calc']);
+    tr.appendChild(calc);
+    const inc = el('td','num', won(s.income));
+    editable(inc, ['budget','scenarios',i,'income'], {number:true});
+    tr.appendChild(inc);
+    const diff = s.income - total;
+    const tdD = el('td','num');
+    const badge = el('span','bep ' + (diff>=0?'ok':'warn'), (diff>=0?'+':'') + won(diff).replace('원','') );
+    tdD.appendChild(badge);
+    tr.appendChild(tdD);
+    tb2.appendChild(tr);
+  });
+  t2.appendChild(tb2);
+  card.appendChild(t2);
+  card.appendChild(el('div','hint','손익분기: 참가비 25,000원 기준 약 ' + Math.ceil(total/25000) + '명'));
+  sec.appendChild(card);
+  return sec;
+}
+
+function renderRoles(){
+  const sec = el('section');
+  sec.appendChild(el('h2','', '⑤ 역할 분담'));
+  sec.appendChild(el('div','desc','담당자 이름을 클릭해서 채워넣기'));
+  const card = el('div','card');
+  const t = el('table');
+  const thead = el('thead');
+  const hr = el('tr');
+  ['역할','담당','비고'].forEach(h=> hr.appendChild(el('th','',h)));
+  thead.appendChild(hr); t.appendChild(thead);
+  const tb = el('tbody');
+  state.roles.forEach((r,i)=>{
+    const tr = el('tr');
+    tr.appendChild(el('td','',r.role));
+    const p = el('td','',r.person);
+    p.style.fontWeight='600';
+    if (r.person.includes('미정')) p.style.color='var(--amber)';
+    editable(p, ['roles',i,'person']);
+    tr.appendChild(p);
+    const n = el('td','',r.note);
+    n.style.color='var(--sub)'; n.style.fontSize='13px';
+    tr.appendChild(n);
+    tb.appendChild(tr);
+  });
+  t.appendChild(tb);
+  card.appendChild(t);
+  sec.appendChild(card);
+  return sec;
+}
+
+function renderFlea(){
+  const sec = el('section');
+  sec.appendChild(el('h2','', '⑥ 책 플리마켓 운영 규칙'));
+  sec.appendChild(el('div','desc',''));
+  const card = el('div','card');
+  const ul = el('ul','plain');
+  state.flea.forEach((f,i)=>{
+    const li = el('li');
+    const span = el('span','',f);
+    editable(span, ['flea',i]);
+    li.appendChild(span);
+    ul.appendChild(li);
+  });
+  card.appendChild(ul);
+  sec.appendChild(card);
+  return sec;
+}
+
+function renderRecruit(){
+  const r = state.recruit;
+  const sec = el('section');
+  sec.appendChild(el('h2','', '⑦ 모집 현황'));
+  sec.appendChild(el('div','desc','신청(입금 확정) 인원을 +/− 로 갱신'));
+  const card = el('div','card');
+
+  const bar = el('div','bar');
+  const fill = el('div','fill');
+  fill.style.width = Math.min(100, (r.current/r.max)*100) + '%';
+  bar.appendChild(fill);
+  const mark = el('div','bep-mark');
+  mark.style.left = (r.breakeven/r.max)*100 + '%';
+  mark.title = '손익분기 ' + r.breakeven + '명';
+  bar.appendChild(mark);
+  card.appendChild(bar);
+
+  const nums = el('div','recruit-nums');
+  nums.appendChild(el('span','', '현재 ' + r.current + '명'));
+  const right = el('span');
+  [['손익분기 ','breakeven'], [' · 목표 ','goal'], [' · 최대 ','max']].forEach(([label,key])=>{
+    right.appendChild(document.createTextNode(label));
+    const n = el('span','', String(r[key]));
+    editable(n, ['recruit', key], {number:true});
+    right.appendChild(n);
+    right.appendChild(document.createTextNode('명'));
+  });
+  nums.appendChild(right);
+  card.appendChild(nums);
+
+  const st = el('div','stepper');
+  const minus = el('button','','−');
+  minus.addEventListener('click', ()=>{ if (r.current>0){ r.current--; persist(); render(); } });
+  const cur = el('div','cur', String(r.current));
+  const plus = el('button','','+');
+  plus.addEventListener('click', ()=>{ r.current++; persist(); render(); });
+  st.appendChild(minus); st.appendChild(cur); st.appendChild(plus);
+  st.appendChild(el('span','desc','명 신청 완료'));
+  card.appendChild(st);
+  sec.appendChild(card);
+  return sec;
+}
+
+function renderDecisions(){
+  const sec = el('section');
+  sec.appendChild(el('h2','', '⑧ 결정 로그 & 미결 사항'));
+  sec.appendChild(el('div','desc','🔶 = 아직 결정 안 됨 · 결정되면 칩을 눌러 확정으로 전환'));
+  const card = el('div','card');
+  state.decisions.forEach((d,i)=>{
+    const row = el('div','dec');
+    row.appendChild(el('div','date', d.date));
+    const chip = el('span','chip ' + (d.open?'s0':'s2'), d.open?'미결':'확정');
+    chip.style.flex='0 0 auto';
+    chip.addEventListener('click', ()=>{
+      d.open = !d.open;
+      if (!d.open) d.date = (new Date().getMonth()+1) + '/' + new Date().getDate();
+      persist(); render();
+    });
+    row.appendChild(chip);
+    const txt = el('div','txt', d.text);
+    editable(txt, ['decisions',i,'text']);
+    row.appendChild(txt);
+    const del = el('button','del','✕');
+    del.title='삭제';
+    del.addEventListener('click', ()=>{
+      if (confirm('이 항목을 삭제할까요?\n"' + d.text + '"')){
+        state.decisions.splice(i,1);
+        persist(); render();
+      }
+    });
+    row.appendChild(del);
+    card.appendChild(row);
+  });
+  const add = el('div','add-row');
+  const inp = el('input');
+  inp.placeholder = '새 결정/미결 사항 입력 후 Enter';
+  const btn = el('button','','추가');
+  const doAdd = ()=>{
+    const v = inp.value.trim();
+    if (!v) return;
+    state.decisions.push({ date:'미결', text:v, open:true });
+    persist(); render();
+  };
+  inp.addEventListener('keydown', e=>{ if (e.key==='Enter') doAdd(); });
+  btn.addEventListener('click', doAdd);
+  add.appendChild(inp); add.appendChild(btn);
+  card.appendChild(add);
+  sec.appendChild(card);
+  return sec;
+}
+
+/* ====== 시작 ====== */
+function startLocal(){
+  const saved = localStorage.getItem(LOCAL_KEY);
+  if (saved){
+    try { state = mergeState(JSON.parse(saved)); } catch(e){ /* 손상 시 기본값 */ }
+  }
+  render();
+}
+
+function startShared(){
+  const scripts = [
+    'https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js',
+    'https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js'
+  ];
+  let loaded = 0;
+  scripts.forEach(src=>{
+    const s = document.createElement('script');
+    s.src = src;
+    s.onload = ()=>{
+      loaded++;
+      if (loaded === scripts.length){
+        firebase.initializeApp(firebaseConfig);
+        db = firebase.database();
+        const banner = document.getElementById('mode-banner');
+        banner.className = 'shared';
+        banner.textContent = '🟢 공유 모드 — 수정하면 모두의 화면에 반영됩니다';
+        db.ref(DB_PATH).on('value', snap=>{
+          const val = snap.val();
+          if (val) state = mergeState(val);
+          else db.ref(DB_PATH).set(state);
+          render();
+        });
+      }
+    };
+    s.onerror = ()=>{ startLocal(); };
+    document.head.appendChild(s);
+  });
+}
+
+if (firebaseConfig) startShared();
+else startLocal();
+</script>
+</body>
+</html>
