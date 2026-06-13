@@ -475,7 +475,7 @@ function render(){
   const page = document.getElementById('page');
   page.textContent = '';
   page.appendChild(RENDERERS[active]());
-  if (!editing()) page.appendChild(renderComments(active));
+  if (!editing() && active !== 'home') page.appendChild(renderComments(active));
   renderFab();
 }
 
