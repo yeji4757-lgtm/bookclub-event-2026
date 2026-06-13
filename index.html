@@ -312,7 +312,6 @@ const DEFAULT_STATE = {
   visitChecklist: [
     { text:'최대 수용 인원 / 테이블·좌석 배치 (체험 세션용 4–6인 테이블 가능?)', done:false },
     { text:'마이크·스피커·빔/스크린 유무', done:false },
-    { text:'음료가 대관비에 포함인지, 별도면 단가 — 예산 1순위 변수', done:false },
     { text:'플리마켓 부스 공간 + 콘센트 위치', done:false },
     { text:'외부 음식 반입 가능 여부', done:false },
     { text:'환불·취소 규정, 계약금 일정', done:false }
@@ -320,7 +319,7 @@ const DEFAULT_STATE = {
   budget: {
     expenses: [
       { item:'대관비', amount:500000, note:'확정' },
-      { item:'음료/다과', amount:150000, note:'답사 때 포함 여부 확인' },
+      { item:'음료/다과', amount:150000, note:'대관비 별도 — 인당 음료 주문' },
       { item:'인쇄물·명찰·소품', amount:100000, note:'포스터, 네임택, 체험 텍스트, 가격표' },
       { item:'예비비', amount:50000, note:'' }
     ],
