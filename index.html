@@ -41,11 +41,15 @@
   .sb-head .ttl{font-size:15px;font-weight:700;color:var(--ink);line-height:1.45}
   .sb-head .meta{font-size:13px;color:var(--sub);margin-top:6px}
   .sb-head .dday{font-weight:700;color:var(--accent)}
-  nav{padding:10px 10px;flex:1}
+  nav{padding:8px 10px;flex:1}
+  .nav-group-title{
+    font-size:11.5px;font-weight:700;letter-spacing:0.04em;color:var(--sub);
+    padding:14px 12px 5px;text-transform:none;
+  }
   .nav-item{
     display:flex;align-items:center;justify-content:space-between;gap:8px;
     width:100%;text-align:left;border:none;background:none;cursor:pointer;
-    padding:9px 12px;border-radius:7px;font-size:14.5px;color:var(--body);
+    padding:8px 12px 8px 18px;border-radius:7px;font-size:14.5px;color:var(--body);
   }
   .nav-item:hover{background:#f3f1ef}
   .nav-item.active{background:var(--accent-bg);color:var(--accent);font-weight:700}
@@ -390,17 +394,22 @@ function cancelEdit(){
 }
 
 /* ====== 섹션 라우팅 ====== */
-const SECTIONS = [
-  { id:'home',      label:'개요' },
-  { id:'timeline',  label:'당일 타임라인' },
-  { id:'contents',  label:'콘텐츠' },
-  { id:'roadmap',   label:'준비 로드맵' },
-  { id:'budget',    label:'예산' },
-  { id:'roles',     label:'역할 분담' },
-  { id:'flea',      label:'플리마켓' },
-  { id:'recruit',   label:'모집 현황' },
-  { id:'decisions', label:'결정 로그' }
+const NAV = [
+  { items:[ { id:'home', label:'개요' } ] },
+  { title:'당일 진행', items:[
+    { id:'timeline', label:'당일 타임라인' },
+    { id:'contents', label:'콘텐츠' },
+    { id:'flea',     label:'플리마켓' }
+  ]},
+  { title:'준비 · 운영', items:[
+    { id:'roadmap', label:'준비 로드맵' },
+    { id:'roles',   label:'역할 분담' },
+    { id:'budget',  label:'예산' },
+    { id:'recruit', label:'모집 현황' }
+  ]},
+  { title:'기록', items:[ { id:'decisions', label:'결정 로그' } ] }
 ];
+const SECTIONS = NAV.flatMap(g=>g.items);
 let active = SECTIONS.some(s=>s.id===location.hash.slice(1)) ? location.hash.slice(1) : 'home';
 function go(id){
   active = id;
@@ -493,15 +502,18 @@ function renderChrome(){
   /* 미결 수 */
   const openCount = cur().decisions.filter(d=>d.open).length;
 
-  /* 사이드바 내비 */
+  /* 사이드바 내비 (그룹별) */
   const nav = document.getElementById('nav');
   nav.textContent = '';
-  SECTIONS.forEach(s=>{
-    const b = el('button','nav-item' + (active===s.id?' active':''));
-    b.appendChild(el('span','',s.label));
-    if (s.id==='decisions' && openCount) b.appendChild(el('span','nav-badge', '미결 ' + openCount));
-    b.addEventListener('click', ()=>go(s.id));
-    nav.appendChild(b);
+  NAV.forEach(group=>{
+    if (group.title) nav.appendChild(el('div','nav-group-title', group.title));
+    group.items.forEach(s=>{
+      const b = el('button','nav-item' + (active===s.id?' active':''));
+      b.appendChild(el('span','',s.label));
+      if (s.id==='decisions' && openCount) b.appendChild(el('span','nav-badge', '미결 ' + openCount));
+      b.addEventListener('click', ()=>go(s.id));
+      nav.appendChild(b);
+    });
   });
 
   /* 모바일 탭 */
