@@ -169,6 +169,19 @@
   .rule-list li:before{content:"";flex:0 0 5px;height:5px;border-radius:50%;background:var(--line-strong);margin-top:11px}
   .rule-list li .v{flex:1}
 
+  /* 댓글 */
+  .cm-item{display:flex;gap:10px;padding:11px 2px;border-bottom:1px solid var(--line);align-items:flex-start}
+  .cm-item:last-child{border-bottom:none}
+  .cm-body{flex:1;min-width:0}
+  .cm-head{font-size:13px;color:var(--sub)}
+  .cm-head b{color:var(--ink);font-size:13.5px;font-weight:600}
+  .cm-text{font-size:15px;color:var(--body);white-space:pre-wrap;word-break:break-word}
+  .cm-empty{font-size:14px;color:var(--sub);padding:4px 2px}
+  .cm-form{display:flex;gap:7px;margin-top:14px;flex-wrap:wrap}
+  .cm-form .name{flex:0 0 84px}
+  .cm-form .text{flex:1;min-width:140px}
+  .cm-form button{border:none;background:var(--ink);color:#fff;border-radius:7px;padding:0 16px;font-size:14px;cursor:pointer;height:35px}
+
   /* ===== 수정 모드 ===== */
   .e-in{
     font:inherit;font-size:14.5px;width:100%;
@@ -250,7 +263,9 @@ const firebaseConfig = {
   appId: "1:8912710203:web:6503eba20a788e96d74a1e"
 };
 const DB_PATH = 'events/2026-08-01-bookclub';
+const COMMENTS_PATH = 'events/2026-08-01-bookclub-comments';
 const LOCAL_KEY = 'bookclub-event-2026-08-01';
+const COMMENTS_LOCAL_KEY = LOCAL_KEY + '-comments';
 
 /* ====== 기본 데이터 ====== */
 const DEFAULT_STATE = {
@@ -347,6 +362,9 @@ let state = JSON.parse(JSON.stringify(DEFAULT_STATE));
 let draft = null;
 let db = null;
 let connected = false;
+let comments = {};                                            /* {섹션id: {키: {name,text,ts}}} */
+let myName = localStorage.getItem('bc-comment-name') || '';   /* 댓글 작성자 이름 기억 */
+let commentDrafts = {};                                       /* 입력 중인 댓글 (재렌더 시 보존) */
 
 const editing = () => draft !== null;
 const cur = () => draft || state;
@@ -457,6 +475,7 @@ function render(){
   const page = document.getElementById('page');
   page.textContent = '';
   page.appendChild(RENDERERS[active]());
+  if (!editing()) page.appendChild(renderComments(active));
   renderFab();
 }
 
@@ -956,6 +975,88 @@ function renderDecisions(){
   return box;
 }
 
+/* ====== 댓글 ====== */
+function persistLocalComments(){
+  localStorage.setItem(COMMENTS_LOCAL_KEY, JSON.stringify(comments));
+}
+function addComment(section){
+  const text = (commentDrafts[section] || '').trim();
+  if (!text) return;
+  const entry = { name: (myName || '').trim() || '익명', text, ts: Date.now() };
+  commentDrafts[section] = '';
+  if (db){
+    db.ref(COMMENTS_PATH + '/' + section).push(entry);   /* 동시 작성해도 안 겹침 */
+  } else {
+    if (!comments[section]) comments[section] = {};
+    comments[section]['c' + Date.now()] = entry;
+    persistLocalComments();
+    render();
+  }
+}
+function delComment(section, key, name){
+  if (!confirm(name + '님의 댓글을 삭제할까요?')) return;
+  if (db){
+    db.ref(COMMENTS_PATH + '/' + section + '/' + key).remove();
+  } else {
+    delete comments[section][key];
+    persistLocalComments();
+    render();
+  }
+}
+function fmtTs(ts){
+  const d = new Date(ts);
+  return (d.getMonth()+1) + '/' + d.getDate() + ' ' +
+    String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+}
+function renderComments(section){
+  const list = Object.entries(comments[section] || {})
+    .map(([key,c])=>({key, ...c}))
+    .sort((a,b)=>(a.ts||0)-(b.ts||0));
+
+  const panel = el('div','panel');
+  panel.appendChild(el('div','panel-title', '댓글' + (list.length ? ' ' + list.length : '')));
+
+  if (!list.length){
+    panel.appendChild(el('div','cm-empty','아직 댓글이 없어요. 이 화면에 대한 의견을 남겨보세요.'));
+  }
+  list.forEach(c=>{
+    const row = el('div','cm-item');
+    const body = el('div','cm-body');
+    const head = el('div','cm-head');
+    head.appendChild(el('b','', c.name || '익명'));
+    head.appendChild(document.createTextNode(' · ' + fmtTs(c.ts)));
+    body.appendChild(head);
+    body.appendChild(el('div','cm-text', c.text));
+    row.appendChild(body);
+    const del = el('button','tool-btn del','✕');
+    del.title = '삭제';
+    del.addEventListener('click', ()=> delComment(section, c.key, c.name || '익명'));
+    row.appendChild(del);
+    panel.appendChild(row);
+  });
+
+  const form = el('div','cm-form');
+  const nameIn = document.createElement('input');
+  nameIn.className = 'e-in name';
+  nameIn.placeholder = '이름';
+  nameIn.value = myName;
+  nameIn.addEventListener('input', ()=>{
+    myName = nameIn.value;
+    localStorage.setItem('bc-comment-name', myName);
+  });
+  const textIn = document.createElement('input');
+  textIn.className = 'e-in text';
+  textIn.placeholder = '댓글 입력 후 Enter';
+  textIn.value = commentDrafts[section] || '';
+  textIn.addEventListener('input', ()=>{ commentDrafts[section] = textIn.value; });
+  textIn.addEventListener('keydown', e=>{ if (e.key === 'Enter') addComment(section); });
+  const btn = el('button','','등록');
+  btn.addEventListener('click', ()=> addComment(section));
+  form.appendChild(nameIn); form.appendChild(textIn); form.appendChild(btn);
+  panel.appendChild(form);
+  return panel;
+}
+
 const RENDERERS = {
   home: renderHome, timeline: renderTimeline, contents: renderContents,
   roadmap: renderRoadmap, budget: renderBudget, roles: renderRoles,
@@ -968,6 +1069,7 @@ function startLocal(){
   if (saved){
     try { state = mergeState(JSON.parse(saved)); } catch(e){ /* 손상 시 기본값 */ }
   }
+  try { comments = JSON.parse(localStorage.getItem(COMMENTS_LOCAL_KEY) || '{}'); } catch(e){ comments = {}; }
   connected = false;
   render();
 }
@@ -994,6 +1096,10 @@ function startShared(){
           /* 수정 모드 중엔 화면을 덮어쓰지 않음 (저장 시 내 내용이 반영됨) */
           if (!editing()) render();
           else renderChrome();
+        });
+        db.ref(COMMENTS_PATH).on('value', snap=>{
+          comments = snap.val() || {};
+          if (!editing()) render();
         });
       }
     };
