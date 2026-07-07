@@ -935,17 +935,24 @@ function renderRecruit(){
 function renderDecisions(){
   const s = cur();
   const box = el('div');
-  box.appendChild(pageHead('결정 로그', editing() ? '상태 표시를 누르면 미결 ↔ 확정 전환' : '확정된 결정과 아직 정해야 할 것들'));
+  box.appendChild(pageHead('결정 로그', editing() ? '상태 표시를 누르면 미결 → 확정 → 진행 안 함 순으로 전환' : '확정된 결정, 진행하지 않기로 한 것, 아직 정해야 할 것들'));
   const panel = el('div','panel');
   s.decisions.forEach((d,i)=>{
     const row = el('div','dec');
-    const badge = el('span','badge ' + (d.open?'s0':'s2') + (editing()?' clickable':''), d.open?'미결':'확정');
+    const st = d.no ? {cls:'neg', label:'진행 안 함'} : d.open ? {cls:'s0', label:'미결'} : {cls:'s2', label:'확정'};
+    const badge = el('span','badge ' + st.cls + (editing()?' clickable':''), st.label);
     badge.style.flex = '0 0 auto';
     badge.style.marginTop = '2px';
     if (editing()){
       badge.addEventListener('click', ()=>{
-        d.open = !d.open;
-        if (!d.open && d.date === '미결') d.date = (new Date().getMonth()+1) + '/' + new Date().getDate();
+        if (d.open){                       /* 미결 → 확정 */
+          d.open = false; d.no = false;
+          if (d.date === '미결') d.date = (new Date().getMonth()+1) + '/' + new Date().getDate();
+        } else if (!d.no){                 /* 확정 → 진행 안 함 */
+          d.no = true;
+        } else {                           /* 진행 안 함 → 미결 */
+          d.no = false; d.open = true;
+        }
         render();
       });
       const dt = inp(d,'date',{sm:true}); dt.style.width='64px';
